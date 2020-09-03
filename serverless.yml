@@ -20,7 +20,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
-  region: us-east-2
+  region: us-east-1
 
   # These environment variables are made available to our functions
   # under process.env.
@@ -28,8 +28,6 @@ provider:
     tableName: ${self:custom.tableName}
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
-  # 'iamRoleStatements' defines the permission policy for the Lambda function.
-  # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -60,6 +58,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
@@ -71,6 +70,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
@@ -82,6 +82,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
@@ -93,6 +94,7 @@ functions:
           method: put
           cors: true
           authorizer: aws_iam
+
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
@@ -104,6 +106,7 @@ functions:
           method: delete
           cors: true
           authorizer: aws_iam
+
   billing:
     # Defines an HTTP API endpoint that calls the main function in billing.js
     # - path: url path is /billing
@@ -115,14 +118,15 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
-  # Create our resources with separate CloudFormation templates
-  resources:
-    # API Gateway Errors
-    - ${file(resources/api-gateway-errors.yml)}
-    # DynamoDB
-    - ${file(resources/dynamodb-table.yml)}
-    # S3
-    - ${file(resources/s3-bucket.yml)}
-    # Cognito
-    - ${file(resources/cognito-user-pool.yml)}
-    - ${file(resources/cognito-identity-pool.yml)}
+
+# Create our resources with separate CloudFormation templates
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
+  # DynamoDB
+  - ${file(resources/dynamodb-table.yml)}
+  # S3
+  - ${file(resources/s3-bucket.yml)}
+  # Cognito
+  - ${file(resources/cognito-user-pool.yml)}
+  - ${file(resources/cognito-identity-pool.yml)}
