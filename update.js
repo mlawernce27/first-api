@@ -17,7 +17,7 @@ export const main = handler(async (event, context) => {
     UpdateExpression: "SET content = :content, attachment = :attachment",
     ExpressionAttributeValues: {
       ":attachment": data.attachment || null,
-      ":content": data.content || null
+      ":content": data.content || null,
       ":isFavorite": data.isFavorite || null
     },
     // 'ReturnValues' specifies if and how to return the item's attributes,
